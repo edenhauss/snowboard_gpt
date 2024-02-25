@@ -1,4 +1,4 @@
-from libs import *
+from . import *
 
 class UserInfo:
     def __init__(self) -> None:
