@@ -35,3 +35,9 @@ api_key = "Enter your OpenAI key"
 
 #### Необходимо установить:
 
+* [Python 3.11.x](https://www.python.org/downloads/release/python-3110/)
+* [OpenAI API (1.2.4)](https://pypi.org/project/openai/1.2.4/)
+
+```
+pip install -r requirements.txt
+```
