@@ -41,3 +41,9 @@ api_key = "Enter your OpenAI key"
 ```
 pip install -r requirements.txt
 ```
+
+#### Запуск приложения
+
+```
+python -m bot.main (из корневого каталога)
+```
