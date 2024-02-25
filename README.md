@@ -45,5 +45,5 @@ pip install -r requirements.txt
 #### Запуск приложения
 
 ```
-python -m bot.main (из корневого каталога)
+python -m bot.main
 ```
