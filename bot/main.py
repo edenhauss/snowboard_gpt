@@ -21,7 +21,7 @@ def process_survey(question_key: str, answer: str, user_info: UserInfo) -> Tuple
 
     required_keys = ["Имя", "Опыт", "Цель", "Дополнительная информация"]
     if all(key in user_info.data for key in required_keys): # Проверка на соответствие ключей
-        info = "\n".join([f'{x[0]} - {x[1]}' for x in user_info.data.items()]) # Вывод Dict -> str в удобном формате
+        info = "\n".join([f'{x[0]}: {x[1]}' for x in user_info.data.items()]) # Вывод Dict -> str в удобном формате
         board_choice = f"\nВаша информация:\n{info}\n"
         print(board_choice)
         restart = input("Продолжить? (Введите Enter или '-' для прохождения опроса заново)\n")
@@ -40,7 +40,7 @@ def gpt_generate(user_info: UserInfo) -> str:
     message = [
         {
             "role": "user", 
-            "content": "\n".join([f'{x[0]} - {x[1]}' for x in user_info.data.items()]) # Ввод user_info.data в удобном формате
+            "content": "\n".join([f'{x[0]}: {x[1]}' for x in user_info.data.items()]) # Ввод user_info.data в удобном формате
         }
     ]
 
@@ -64,7 +64,7 @@ def gpt_generate(user_info: UserInfo) -> str:
                 - Форма: [описание подходящих форм досок для фрирайда и уровня опыта]
                 - Технологии: [технологии, которые лучше подойдут для фрирайда и данного уровня опыта]
 
-                Для размера ботинок, учитывая размер ноги пользователя, предлагаю следующие значения: [размеры ботинок в соответствии с размером стопы пользователя].
+                Для размера ботинок, учитывая размер ноги пользователя, предлагаю следующие значения: [если это указано в доп.информации].
 
                 Желаю тебе невероятных впечатлений и массу удовольствия на склонах, [имя пользователя]! Пусть каждый твой спуск будет наполнен радостью и мастерством!
             """
