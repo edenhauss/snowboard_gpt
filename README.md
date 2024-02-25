@@ -24,7 +24,7 @@
 
 Клонируйте репозиторий на свой локальный компьютер с помощью команды  
 ```
-git clone https://github.com/edenhauss/quanttelecom-test.git
+git clone https://github.com/edenhauss/snowboard_gpt.git
 ```
 
 #### Настройка config.py
