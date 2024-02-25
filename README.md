@@ -16,7 +16,7 @@
 
 ### Блок-схема
 
-![text](diagram.png "text")
+![Блок схема](diagram.png)
 
 ---
 
