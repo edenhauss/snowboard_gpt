@@ -121,5 +121,9 @@ if __name__ == "__main__":
           "Но сначала мне нужно собрать некоторую информацию о тебе.\n")
     
     # Запуск опроса и генерации GPT
-    response = chat_function(user_info)
-    print(response)
+    while True:
+        response = chat_function(user_info)
+        
+        if response:
+            print(response)
+            break
