@@ -20,8 +20,8 @@ def process_survey(question_key: str, answer: str, user_info: UserInfo) -> Tuple
     user_info.update(question_key, answer)
 
     required_keys = ["Имя", "Опыт", "Цель", "Дополнительная информация"]
-    if all(key in user_info.data for key in required_keys):
-        info = "\n".join([f'{x[0]} - {x[1]}' for x in user_info.data.items()])
+    if all(key in user_info.data for key in required_keys): # Проверка на соответствие ключей
+        info = "\n".join([f'{x[0]} - {x[1]}' for x in user_info.data.items()]) # Вывод Dict -> str в удобном формате
         board_choice = f"\nВаша информация:\n{info}\n"
         print(board_choice)
         restart = input("Продолжить? (Введите Enter или '-' для прохождения опроса заново)\n")
@@ -29,20 +29,22 @@ def process_survey(question_key: str, answer: str, user_info: UserInfo) -> Tuple
         if restart == "-":
             print("Хорошо, начнем сначала")
             user_info.reset()
-            return False, True
-        return True, False
-    return False, False
+            return False, True # completed: False, restart: True
+        return True, False # completed: True, restart: False
+    return False, False # completed: False, restart: False
 
 def gpt_generate(user_info: UserInfo) -> str:
     print("Генерирую ответ...\n")
 
+    # Ввод user-промпта
     message = [
         {
             "role": "user", 
-            "content": "\n".join([f'{x[0]} - {x[1]}' for x in user_info.data.items()])
+            "content": "\n".join([f'{x[0]} - {x[1]}' for x in user_info.data.items()]) # Ввод user_info.data в удобном формате
         }
     ]
 
+    # Ввод system-промпта
     message.append(
         {
             "role": "system", 
@@ -69,6 +71,7 @@ def gpt_generate(user_info: UserInfo) -> str:
         }
     )
 
+    # Генерация GPT запроса
     try:
         completion: ChatCompletion = gpt_client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
@@ -86,6 +89,7 @@ def gpt_generate(user_info: UserInfo) -> str:
     except KeyboardInterrupt: 
         return "Отмена запроса"
     else:
+        # Возврат успешной генерации
         return completion.choices[0].message.content
     
 def chat_function(user_info: UserInfo) -> str:
@@ -96,24 +100,26 @@ def chat_function(user_info: UserInfo) -> str:
         "Любая дополнительная информация? (введи '-', чтобы пропустить)": "Дополнительная информация"
     }
     
+    # Удобный вывод в терминал с соответствием ключей
     for question_prompt, question_key in questions.items():
         if question_key not in user_info.data:
-            next(ask_question(question_key, user_info))
+            next(ask_question(question_key, user_info)) # использование генератора
             user_answer = input(question_prompt + "\n")
             completed, restart = process_survey(question_key, user_answer, user_info)
 
-            if completed:
+            if completed: # успешное прохождение запроса
                 return gpt_generate(user_info)
-            if restart:
+            if restart: # требуется повторное прохождение опроса
                 return ""
 
 if __name__ == "__main__":
-    user_info = UserInfo()
-    gpt_client = Client(api_key=api_key)
+    user_info = UserInfo() # инициализация объекта класса UserInfo
+    gpt_client = Client(api_key=api_key) # инициализация клиента GPT
+    
+    # Приветственное сообщение
     print("Привет! Я - Робот Алёша, я помогу выбрать тебе доску для сноуборда.\n"\
           "Но сначала мне нужно собрать некоторую информацию о тебе.\n")
-    while True:
-        response = chat_function(user_info)
-        if response:
-            print(response)
-            break
+    
+    # Запуск опроса и генерации GPT
+    response = chat_function(user_info)
+    print(response)
